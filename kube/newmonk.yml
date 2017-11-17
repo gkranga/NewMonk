@@ -1,0 +1,43 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: newmonk-pod
+  labels: 
+    app: newmonk
+spec:
+      containers:
+        - name: newmonkappcontainer
+          image: index.docker.io/gkranga/newmonkapp:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+
+        - name: newmonkmysqlcontainer
+          image: index.docker.io/gkranga/newmonkmysql:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3306
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: MYSQL_ROOT_PASSWORD
+
+        - name: newmonkelccontainer
+          image: index.docker.io/gkranga/newmonkelc:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: [9200,5601]
+
+        - name: newmonkrediscontainer
+          image: index.docker.io/gkranga/newmonkredis:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6397 
+
+
+      imagePullSecrets:
+        - name: myregistrykey
+      restartPolicy: Never
