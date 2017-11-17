@@ -1,5 +1,5 @@
 FROM ubuntu:14.04
-RUN apt-get update
+RUN apt-get -y update && apt-get -y upgrade 
 RUN apt-get install -y nginx
 RUN apt-get install -y php5 libapache2-mod-php5 php5-mcrypt
 RUN apt-get install -y git
@@ -19,4 +19,5 @@ COPY error.yml /applications/newmonk/server/config
 COPY configphp /applications/newmonk/server/config
 COPY default /etc/nginx/sites-enabled/
 COPY nginx.conf /etc/nginx/
-RUN service nginx restart
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+CMD /usr/sbin/nginx; 
